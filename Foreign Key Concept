@@ -1,0 +1,88 @@
+-- Step 1: Create a table
+create database user;
+use user;
+CREATE TABLE User (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(50),
+    phone_number VARCHAR(15)
+);
+
+-- Step 2: Insert 10 rows of dummy data
+INSERT INTO user (name, email, phone_number) VALUES
+('John Doe', 'john.doe@example.com', '1234567890'),
+('Jane Smith', 'jane.smith@example.com', '9876543210'),
+('Alice Johnson', 'alice.johnson@example.com', '4561237890'),
+('Bob Brown', 'bob.brown@example.com', '7890123456'),
+('Charlie Davis', 'charlie.davis@example.com', '5678901234'),
+('Emily Wilson', 'emily.wilson@example.com', '3214567890'),
+('Frank Thomas', 'frank.thomas@example.com', '6547893210'),
+('Grace Lee', 'grace.lee@example.com', '7896541230'),
+('Henry Walker', 'henry.walker@example.com', '8901234567'),
+('Ivy Scott', 'ivy.scott@example.com', '9012345678');
+
+select * from user;
+select * from user limit 4;
+select * from user limit 2 offset 4;
+
+create table comment(
+      ID INT primary key auto_increment,
+      content varchar(255),
+      user_id int,  -- the user who commented on post
+      post_id int,  -- the post on which the comment is made
+      created_at timestamp default current_timestamp
+);
+INSERT INTO comment (content, user_id, post_id) VALUES
+('new contet',1,2);
+INSERT INTO comment (content, user_id, post_id) VALUES
+('new post',2,3);
+
+select * from comment;
+delete from comment; -- not the preferred way it's slower
+truncate table comment; -- delet all rows from table faster than delet
+
+-- create a table for managing likes
+-- if we create a comment then it should have some check to identify whether the post exists or not and the user exists or not
+-- first way to check user with id exist and post no with that id also exists or not if both return same then add comment
+-- we can use foregin key here: a foregin key is a column or a group of columns in a table that refernce the primary key of another table;
+
+drop table comment;
+select * from comment;
+create table post(
+     id int primary key auto_increment,
+     user_id int,
+     content varchar(255),
+     created_at timestamp default current_timestamp
+);
+INSERT INTO post(user_id,content) VALUES
+(1,'Atlassian Engineer');
+INSERT INTO post(user_id,content) VALUES
+(4,'Google Engineers');
+INSERT INTO post(user_id,content) VALUES
+(9,'Microsoft Engineer');
+select * from post;
+
+
+-- will create table comment with refernce with user id and post id
+
+create table comments(
+     id int primary key auto_increment,
+     content varchar(255),
+     user_id int,
+     post_id int,
+     created_at timestamp default current_timestamp,
+     foreign key (user_id) references user(ID),
+     foreign key (post_id) references post(id)
+);
+
+desc comments;
+INSERT INTO comments(content,user_id,post_id) VALUES
+('nice post',1,1);
+select * from comments;
+INSERT INTO comments(content,user_id,post_id) VALUES
+('well engineers',2,3);
+select * from comments;
+INSERT INTO comments(content,user_id,post_id) VALUES
+('well engineers 4',10,2);
+
+
